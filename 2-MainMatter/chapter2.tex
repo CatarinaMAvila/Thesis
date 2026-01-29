@@ -17,17 +17,63 @@
 
 \section{Fundamentals of Microstrip Patch Antennas}
 %\label{sec:introduction}
+The reason \gls{MPA} are commonly used is due to its advantages, according to~\cite{garg2001microstrip},  some of them are the fact that the antennas' feed lines can be manufactured at the same time as the antenna structure, \glspl{MPA} can also be integrated with the conventional antenna integrated circuits, they can easily be made with dual frequency and dual polarization, patch antennas are overall easy to mass produce as they have a low production cost and finally \gls{MPA}s are low profile, meaning they are thin, and light weight. 
+Even with the advantages listed before \glspl{MPA} also have some drawbacks when juxtaposed to conventional microwave antennas~\cite{garg2001microstrip} such as a smaller bandwidth, lower gain, poor efficiency, reduced radiated power due to the ohmic loss along the antenna components, difficulty maintaining low sidelobes because of surface wave excitation, cross-polarization problems due to asymmetry of the patch and feed line discontinuities, complex feed structures for high performance arrays and reduced flexibility for omnidirectional designs as it only radiates into half-space because the ground place blocks radiation. 
+Nevertheless, the impact of some of these problems, such as bandwidth and surface wave losses, can be reduced in different ways like the ones mentioned in~\cite{mpa_limitations_2013}. 
 
-\subsection{Campos Radiados MPA Retangular}
-VANTAGENS E DESVANTAGENS DAS MPAS?
+This chapter will start by first analyzing a standard rectangular \gls{MPA} then an explanation of some of the main performance parameters of an antenna. 
+After these two topics we will follow with an overview of different geometries, sizing methods, bandwidth enhancement methods, dual and tri-band methods with some use cases, feed methods and in the end some \gls{AI} optimization techniques.
 
-\subsection{Figures of Merit}
-The performance of an antenna, such as the MPA, can be characterized by numerous figures of metric although it isn’t required to analyse them all to get a thorough description of the antenna as the importance of each parameter depends on the application of the antenna. 
-It is important to note that some physical characteristics of the antennas can also influence these metrics such as the size of the antenna that according to [7] increasing the height of the antenna’s substrate improves both the bandwidth and efficiency however there is an inherent trade-off with these changes as a taller antenna produces more surface waves which in turn degrade both the radiation pattern and polarization.
+\subsection{Standard Rectangular Microstrip Patch Antenna}
+To give context to this thesis, we should better understand \glspl{MPA} for this we should start with a brief explanation and analysis of the rectangular \gls{MPA} using~\cite{stutzman2012antenna} for reference. 
+As it was said before it, the \gls{MPA} consists of a metallic patch on a dielectric substrate with a ground plane on the bottom of the substrate. 
+The patch has length $L$ and width $W$, and the substrate has thickness h and relative permittivity $\epsilon_{r}$. For this analysis we will assume a coordinate system where the\gls{MPA} is parallel to the $xy$-plane. 
+
+The next important topic of discussion in this analysis is the substrate’s choice as it can affect the performance, accuracy and manufacturability of the \gls{MPA}. 
+[10] lists some common materials such as \gls{PTFE} which has low loss and is used in high-performance antennas, FR-4 which is cheap but has high loss and not ideal for precision antennas and Ceramics which are used for very small patches but can have a very high $\epsilon_{r}$.
+
+The dominant mode of an\gls{MPA} is TM$_{10}$ meaning the rectangular patch resonates when its $L \approx 0.49 \cdot \lambda_d$, with $\lambda_d$ being the wavelength inside the dielectric. 
+This antenna is called half-wave patch and its electric field distribution exhibits fringing fields, which happens when the electric field spills into the air at the edges, making the patch longer than its physical length, this explains why the $L$ of the patch is less than half its wavelength. 
+However, this is just a starting point, where the input impedance is calculated based on the frequency and after finding the resonant frequency the patch is scaled and adjusted to match it. 
+The $L$ of the patch is chosen according to the desired resonance, and the $W$ is chosen according to the input impedance, as a wider patch signifies lower input resistance and a narrower patch the opposite.
+
+The problem with the starting resonant $L$ formula is that it doesn't consider the fringing fields meaning that the actual $L$ of the antenna is longer than what was calculated. 
+To account for this, the resonant $L$ should be below a half wavelength to still achieve resonance. 
+So, the new formula is $L = \frac{0.5 \cdot \lambda_d}{\epsilon_{r}} - 2\Delta L$, where $2\Delta L$ is the $L$ of the fringing field on both sides of the patch. 
+To calculate the fringing length $\Delta L$ we use 
+\[\Delta L = 0.412t\frac{(\epsilon_{re}+0.3)(\frac{W}{t}+0.264)}{(\epsilon_{re}-0.258)(\frac{W}{t}+0.8)}\] 
+where the effective dielectric constant $\epsilon_{re}$ is given by 
+\[\epsilon_{re} = \frac{\epsilon_r + 1}{2} + \frac{\epsilon_r - 1}{2}({1+\frac{10t}{W}})^{-\frac{1}{2}}\] 
+which takes into account that some fields are in the dielectric and other in the air.
+
+The radiation pattern of the \gls{MPA} will have a beam peak in the $z$-direction, perpendicular to the patch surface. 
+To get the pattern expressions we first need to understand why the patch radiates broadside and why the feed line doesn’t radiate. 
+The first one happens because of the fringing fields at the edges of the antenna that act as two slot antennas separated by $L$. They are 180\textdegree~out of phase, but the physical separation introduces another 180\textdegree~phase shift in the far field canceling these shifts allowing for the two slots to radiate in phase making the beam radiate normal to the patch. 
+The feed line doesn’t radiate because it is very narrow compared to a wavelength, meaning that the electric fields on its two sides are equal in opposite directions and the radiation of each fringing field cancels in the far field as its phases have a 180\textdegree~difference. 
+Therefore, the far field pattern is the combination of a $\sin$ function from the aperture $W$ and a $\cos$ function from the two-slot array separated by $L$. 
+
+The general far-field components, according to~\cite{stutzman2012antenna} and assuming the z-axis is perpendicular to the patch are
+$E_{\theta} = E_0 \cos \phi f(\theta, \phi)$ and $E_{\phi} = E_0 \cos \theta \sin \phi f(\theta, \phi)$
+The pattern function, also according to~\cite{stutzman2012antenna}, with $\beta$ being the free-space phase constant, is as follows:
+\[
+f(\theta, \phi) = \frac{\sin(\frac{\beta W}{2} \sin \theta \sin \phi)}{\frac{\beta W}{2} \sin \theta \sin \phi} \cdot \cos(\frac{\beta L}{2} \sin \theta \cos \phi)
+\]
+$\theta$ is the elevation angle and is measured from the $+z$ axis down and $\phi$ is the azimuth angle and is measured in the $xy$-plane.
+
+This pattern function can be evaluated in two planes: the $E$-plane and the $H$-plane. 
+The $E$-plane, where $\phi = 0$\textdegree~is the plane that contains the feed 
+\[F_E(\theta) = \cos(\frac{\beta L}{2} \sin \theta)\] 
+and the H-plane, where $\phi = 90$\textdegree~is the plane perpendicular to the feed 
+\[F_H(\theta) = \cos \theta\frac{\sin(\frac{\beta W}{2} \sin \theta)}{\frac{\beta W}{2} \sin \theta}\]
+The $E$-plane can be controlled by $L$ and the $H$-plane can be controlled by $W$.
+
+\subsection{Main Figures of Merit}
+The performance of an antenna, can be characterized by numerous figures of metric although it isn’t required to analyse them all to get a thorough description of the antenna as the importance of each parameter depends on the application of the antenna. 
+It is important to note that some physical characteristics of the antennas can also influence these metrics such as the size of the antenna that according to~\cite{balanis2016antenna} increasing the height of the antenna’s substrate improves both the bandwidth and efficiency however there is an inherent trade-off with these changes as a taller antenna produces more surface waves which in turn degrade both the radiation pattern and polarization.
 The metrics that will be considered in this thesis will be described next in this chapter.
 
 \subsubsection{Bandwidth}
-The bandwidt according to [7 ] is the range of frequencies where the antenna characteristics still have an acceptable value within the center frequency. 
+The bandwidth according to [7 ] is the range of frequencies where the antenna characteristics still have an acceptable value within the center frequency. 
 There are two general ways we can classify an antenna based on its bandwidth: broadband and narrowband. 
 Broadband antennas have a greater range of frequencies acceptable to the center frequency. 
 Narrowband antennas have a smaller range of frequencies allowed on the bounds of the center frequency. 
@@ -37,39 +83,36 @@ Small antennas encounter problems related to their impedance bandwidth while lar
 If the antenna is neither large nor small, it can be influenced by either problem depending on its application.
 
 \subsubsection{Gain}
-The gain of the antenna according to [7] is the ratio of the intensity of the antenna in one direction by the intensity of the antenna if it was a perfect isotropic antenna. 
+The gain of the antenna according to~\cite{balanis2016antenna} is the ratio of the intensity of the antenna in one direction by the intensity of the antenna if it was a perfect isotropic antenna. 
 It combines both the antenna’s efficiency and its directional capabilities. Usually, the relative gain is what is used. 
 The relative gain has the same definition as the gain, but the values of the isotropic antenna are changed for the ones of a reference antenna whose gain is already known, keeping in mind that both antennas must have the same power input. 
-In [7] two gains are defined: the gain and the realized gain. 
+In~\cite{balanis2016antenna} two gains are defined: the gain and the realized gain. 
 These can have the same value if the antenna is matched to the transmission line as the realized gain considers mismatch loses.
 
-\subsubsection{Directivity}
-The directivity is defined as the ratio between the radiation intensity in a specific direction and the radiation intensity averaged in all directions according to [7]. 
-If there is no direction specified, the directivity refers to the direction where the radiation intensity is maximum. 
-The directivity is relative as it compares the directional properties of the antenna to an isotropic one whose directivity is one. 
-[7] mentions that the total directivity for antennas with orthogonal polarization components is the sum of partial directivities of any two orthogonal polarizations. 
-These partial directivities are the radiation intensity in the specific polarization divided by the total average radiation over all directions. 
-Different antennas can have different patterns, and each pattern has a way to approximate its directivity. 
-For directional antennas, who have a single major lobe and insignificant minor lobes, the directivity is based on the Half-power beamwidth (HPBW) in two perpendicular planes. 
-For omnidirectional antennas there are two different ways to approximate the directivity: the McDonald function and the Pozar function. 
-The McDonald function is usually more accurate for patterns with minor lobes. 
-The Pozar function is more accurate for patterns with little to none minor lobes. 
-However, these approximations won’t work well if there is more than one major lobe or if there are any significant minor lobes.
+\subsubsection{RF Efficiency and Reflection Coefficient}
+The RF efficiency, or total efficiency, is defined in~\cite{balanis2016antenna} as the antenna efficiency and is calculated by $e_0 = e_r \cdot e_c \cdot e_d$, where $e_r$ is the reflection efficiency, $e_c$ is the conduction efficiency and $e_d$ is the dielectric efficiency. 
+[7] states that $e_c$ and $e_d$ are usually combined and become the radiation efficiency, which will be explained next. 
+The reflection efficiency can also be called mismatch efficiency it is calculated using the voltage reflection coefficient, $\Gamma$ or $S_{11}$ (if the reference impedance is equal to the system impedance): $e_r = 1 - |\Gamma|^2$.
+The reflection coefficient, according to~\cite{balanis2016antenna}, is obtained by $\Gamma = \frac{Z_{\text{in}} - Z_0}{Z_{\text{in}} + Z_0}$.
+The voltage standing wave radio, shown in~\cite{balanis2016antenna}, can also be obtained in function of $\Gamma$: $VSWR = \frac{1+|\Gamma|}{1-|\Gamma|}$.
+In~\cite{stutzman2012antenna} it is explained that impedance mismatch decreases the power delivered to/from an antenna and that there are numerous ways to quantify this some of them can be reflection coefficient, VSWR or return loss.
+Also shown in~\cite{stutzman2012antenna} is the return loss in function of $\Gamma$: $RL = -20\log_{10}|\Gamma|$. Typically, we want a high RL, meaning a low $\Gamma$ to have a good match.
+The usual values of these parameters are also shown in~\cite{stutzman2012antenna}: $VSWR \leq 2$, $|\Gamma| \approx \frac{1}{3}$ and $RL \approx 9.5\,dB$.
 
-\subsubsection{Eficiency}
-The radiation efficiency, or just efficiency, is defined by [12] as the ratio of the radiated power by the power received by the antenna. 
-In [7] the radiation efficiency is called \(e_{cd}\) and it considers the conduction and dielectric losses a single measurement called loss resistance, and the ratio is of the power sent to radiation resistance by the power sent to both the radiation resistance and the loss resistance.
+\subsubsection{Radiation Eficiency}
+The radiation efficiency, or just efficiency, is defined by~\cite{kang2017microstrip} as the ratio of the radiated power by the power received by the antenna. 
+In~\cite{balanis2016antenna} the radiation efficiency is called $e_{cd}$ and it considers the conduction and dielectric losses a single measurement called loss resistance, and the ratio is of the power sent to radiation resistance by the power sent to both the radiation resistance and the loss resistance.
 
 \subsubsection{Radiation Pattern}
-The radiation pattern is defined by [7] as a graphical representation in space coordinates of different radiation properties such as directivity, intensity and polarization.It is usually determined in the far-field region in directional coordinates.
-[7] tells us there are three ways to visualize the signal: field pattern (linear scale), power pattern (linear scale) and power pattern (dB). 
+The radiation pattern is defined by~\cite{balanis2016antenna} as a graphical representation in space coordinates of different radiation properties such as directivity, intensity and polarization.It is usually determined in the far-field region in directional coordinates.
+~\cite{balanis2016antenna} tells us there are three ways to visualize the signal: field pattern (linear scale), power pattern (linear scale) and power pattern (dB). 
 The field pattern represents the strength of the electric or magnetic field in relation to the angular space. 
 The power pattern in linear scale characterizes the square of the electric or magnetic field also in relation to the angular space and the power pattern in dBs depicts the electric or magnetic field in dBs in relation to the angular space.
 
 The radiation pattern is represented by lobes that are separated by regions of low radiation intensity. 
-As stated in [7] these lobes can be subclassified in major/main lobe, minor lobe, side love and back lobe. 
+As stated in~\cite{balanis2016antenna} these lobes can be subclassified in major/main lobe, minor lobe, side love and back lobe. 
 The main lobe is the lobe that contains the maximum signal strength. 
-It is possible to have more than one major lobe, [7] mentions split-beam antennas as an example of this. 
+It is possible to have more than one major lobe,~\cite{balanis2016antenna} mentions split-beam antennas as an example of this. 
 The minor lobe is all the other lobes not considered major and represents the radiation in any other direction as the intended one. 
 The side lobes are a subcategory of these are the lobes right next to the main ones. 
 The back lobe is the minor lobe that is exactly 180\textdegree~away from the main lobe. 
@@ -77,10 +120,10 @@ All minor lobes should be minimized.
 
 To properly analyze the radiation pattern, we must define planes to view it. 
 These planes are the E-plane that is parallel to the electric-field vector and the H-plane that is parallel to the magnetic-field vector. 
-[7] explains that with most antennas it is common to align one of the principal plane patterns with one of the geometrical principal planes. 
-An example mentioned in [7] is of the omnidirectional pattern that as an infinite number of principal E-planes and only one principal H-plane. 
+~\cite{balanis2016antenna} explains that with most antennas it is common to align one of the principal plane patterns with one of the geometrical principal planes. 
+An example mentioned in~\cite{balanis2016antenna} is of the omnidirectional pattern that as an infinite number of principal E-planes and only one principal H-plane. 
 
-According to [7] there are three regions around the antenna: the reactive near-field, the radiating near-field and the far-field. 
+According to~\cite{balanis2016antenna} there are three regions around the antenna: the reactive near-field, the radiating near-field and the far-field. 
 The reactive near-field is the region immediately touching the antenna where the reactive field predominates and the angular field distribution is evenly spread with minor variations. 
 The radiating near-field is the region in between where the reactive field still predominates and depending on the distance from the antenna the pattern may begin to form. 
 For antennas that are roughly the same size as the wavelength and antennas that are very small in size compared to the wavelength this region may not be present. 
@@ -89,222 +132,233 @@ The far-field, where we observe the radiation pattern graph, the angular distrib
 To measure the radiation patterns size we need to determine its angles both in the plane field and in the solid field. 
 The radian lets us calculate the width of a beam in the plane field and the steradian lets us calculate the beam’s solid angle. 
 
-An antenna can have different classifications based on its radiation pattern, [7] describes three. 
+An antenna can have different classifications based on its radiation pattern,~\cite{balanis2016antenna} describes three. 
 The first one being an isotropic antenna, it is an antenna who emits radiation equally in every direction with no losses. 
 It is only a theoretical concept, but it is used as a reference for real antennas to see how directive they are. 
 The next is a directional antenna, it is an antenna that has one direction where its directivity is much greater than in any other direction, the reference point for these antennas are the half-wave dipole antennas. 
 The last antenna is the omnidirectional antenna whose pattern on the azimuth plane (H-plane) is nondirectional and on the elevation plane (E-plane) is directional, its shape is commonly known as a donut.
 
-\subsubsection{Impedance}
-TO DO
+\subsubsection{Directivity}
+The directivity is defined as the ratio between the radiation intensity in a specific direction and the radiation intensity averaged in all directions according to~\cite{balanis2016antenna}. 
+If there is no direction specified, the directivity refers to the direction where the radiation intensity is maximum. 
+The directivity is relative as it compares the directional properties of the antenna to an isotropic one whose directivity is one. 
+~\cite{balanis2016antenna} mentions that the total directivity for antennas with orthogonal polarization components is the sum of partial directivities of any two orthogonal polarizations. 
+These partial directivities are the radiation intensity in the specific polarization divided by the total average radiation over all directions. 
+Different antennas can have different patterns, and each pattern has a way to approximate its directivity. 
+For directional antennas, who have a single major lobe and insignificant minor lobes, the directivity is based on the \gls{HPBW} in two perpendicular planes. 
+For omnidirectional antennas there are two different ways to approximate the directivity: the McDonald function and the Pozar function. 
+The McDonald function is usually more accurate for patterns with minor lobes. 
+The Pozar function is more accurate for patterns with little to none minor lobes. 
+However, these approximations won’t work well if there is more than one major lobe or if there are any significant minor lobes.
 
-\section{Sizing Methods}
-Sizing methods according to [7], [8] and [10] are analytical models used as a first step in simulations to determine the physical parameters of the antenna such as the length, width, size of the patch and substrate parameters by evaluating input impedance, pattern, and bandwidth. 
+\section{Implementation State of the Art}
+
+\subsection{Geometry}
+An important factor in the design of a patch antenna is its geometry. 
+As said before, \glspl{MPA} are composed by a metallic patch and a dielectric substrate, for the substrates choice as stated in~\cite{balanis2016antenna} what is sought is a thick one with a dielectric constrain in the lower end of the usual range ($2.2 \leq \varepsilon_r \leq 12$) as for the patch there are a variety of different shapes to pick from the most basic shapes such as rectangular, circular and triangular  to some other unique shapes like flowers, trees or butterflies as seen in~\cite{mishra2022review_diff_geometry}. 
+The rectangular patch is considered by~\cite{garg2001microstrip} as the most basic because it is easy to fabricate, simple to analyze and can be used for a wide range of applications. 
+The circular patch can be seen also by~\cite{garg2001microstrip} as an alternative to the basic rectangular shape in certain applications, namely arrays, as it is slightly smaller than it. 
+The triangular shape is stated by~\cite{design_patch_2024} to being an alternative to both the rectangular and circular geometries when the priority miniaturization as it occupies less metalized area on the substrate than the previous. 
+However, at the present time, especially in Wi-Fi 7, these simpler designs don’t satisfy the need for multi-band operation to accommodate multiple services~\cite{balanis2016antenna}, to get this we need modified antenna shapes. 
+Some methods with modified shapes that let multiple frequencies resonate are slotted patches, that allow for dual-band when a U-slot is cut in one of the patches and for triple-band when another U-slot is cut into either patch, as described in~\cite{microstrip_review_2019}. 
+Stacked \glspl{MPA} which, as mentioned in~\cite{mishra2022review_diff_geometry}, consist of different layers of dielectric material and patches that allow for a broader bandwidth  and gain, however as mentioned before the increase in height causes degradation of the radiation pattern. 
+\gls{DGS}, as it is explained in~\cite{mishra2022review_diff_geometry}, is used on the ground plane changing its paths length, as well as its impedance and capacity values resulting in a larger bandwidth. 
+Fractal geometry, described in~\cite{balanis2016antenna}, as a recursively generated geometry that uses an iterative process which leads to structures that are self-similar and self-affine that provide multiple current paths of different lengths leading to multiple resonant frequencies. 
+
+\subsection{Sizing Methods}
+Sizing methods according to~\cite{balanis2016antenna},~\cite{garg2001microstrip} and~\cite{stutzman2012antenna} are analytical models used as a first step in simulations to determine the physical parameters of the antenna such as the length, width, size of the patch and substrate parameters by evaluating input impedance, pattern, and bandwidth. 
 The most popular sizing methods are the transmission line model, the cavity model and the full wave model.
 
-\subsection{Transmission Line Model}
-The transmission line model, as stated by [7], is the easiest one and it gives good physical insight, but it is less accurate and lacks versatility. 
-[8] states that this method models the interior region of the patch antenna as a section of the transmission line and determines the characteristic impedance and the propagation constrain by the patch size and substrate parameters. 
-[8] defines the rectangular patch by four edges where the variation of the field defines if the edge is a radiating type or not. It also uses the mode \(TM_{10}\) as an example explaining that the edges at \(x=0\) and L are radiating types because along them the electric field is uniform and the walls at \(y=0\) and W are non-radiating types because along them due to half-wave variation. 
-For this reason, [8] states that the patch antenna’s radiation patterns are treated as an array of two narrow slots separated by the path length and the input admittance is obtained by transforming these edges admittances to the feed point.
+\subsubsection{Transmission Line Model}
+The transmission line model, as stated by~\cite{balanis2016antenna}, is the easiest one and it gives good physical insight, but it is less accurate and lacks versatility. 
+~\cite{garg2001microstrip} states that this method models the interior region of the patch antenna as a section of the transmission line and determines the characteristic impedance and the propagation constrain by the patch size and substrate parameters. 
+~\cite{garg2001microstrip} defines the rectangular patch by four edges where the variation of the field defines if the edge is a radiating type or not. It also uses the mode $TM_{10}$ as an example explaining that the edges at $x=0$ and L are radiating types because along them the electric field is uniform and the walls at $y=0$ and W are non-radiating types because along them due to half-wave variation. 
+For this reason,~\cite{garg2001microstrip} states that the patch antenna’s radiation patterns are treated as an array of two narrow slots separated by the path length and the input admittance is obtained by transforming these edges admittances to the feed point.
 
-\subsection{Cavity Model}
+\subsubsection{Cavity Model}
 The cavity model as opposed to the transmission line model is not restricted to rectangular patches and one-dimensional variations. 
-In this model, according to [7], the region between the patch and the ground plane is treated as a cavity bounded electric conductors above and below and magnetic walls around. 
-[8] tells us that this model relies on the assumption that because the substrates is very thin the fields in the interior region do not vary with z. 
-To accurately determine these fields [8] tells us a good assumption to make is that the wall all around the periphery of the patch is magnetic. 
+In this model, according to~\cite{balanis2016antenna}, the region between the patch and the ground plane is treated as a cavity bounded electric conductors above and below and magnetic walls around. 
+~\cite{garg2001microstrip} tells us that this model relies on the assumption that because the substrates is very thin the fields in the interior region do not vary with z. 
+To accurately determine these fields~\cite{garg2001microstrip} tells us a good assumption to make is that the wall all around the periphery of the patch is magnetic. 
 For thin low dielectric constant this wall is placed at a distance approximately equal to its thickness. 
 The problem with this model is that even though the interior fields are easy to determine this is only correct for the first order because the effect of the exterior fields has been excluded from the interior field determination. 
 Despite this, it is still easy to determine the interior electric field distribution in terms of the cavity’s eigenfunctions.
 
-\subsection{Full Wave Model}
-The full wave model is that by [8] to be able to overcome the limitations of the other two models. 
+\subsubsection{Full Wave Model}
+The full wave model is that by~\cite{garg2001microstrip} to be able to overcome the limitations of the other two models. 
 This model includes the effects of dielectric loss, conductor loss, space wave radiation, surface waves and external coupling and removing the simplifying assumptions made by the other models. 
 It maintains accuracy by enforcing the boundary conditions at the air-dielectric interface using Green’s functions or differential forms of Maxwell’s equations. 
 This method is very versatile as it provides the most accurate solution for the impedance and radiation characteristics, it can size arbitrary shapes, arrays and stacked elements. 
 However, as it is numerically intensive and complex it requires a big computational cost and provides less immediate results. 
-Common popular full-wave techniques, according to [8] are spectral-domain full-wave solution, mixed-potential electric field integral equation approach and finite-difference time-domain (FDTD).
-
-\subsection{Exemplo MPA retangular (matemático?)}
-TO DO
-
-\section{Implementation State of the Art}
-\subsection{Geometry}
-An important factor in the design of a patch antenna is its geometry. 
-As said before, MPAs are composed by a metallic patch and a dielectric substrate, for the substrates choice as stated in [7] what is sought is a thick one with a dielectric constrain in the lower end of the usual range (\(2.2 \leq \varepsilon_r \leq 12\)) as for the patch there are a variety of different shapes to pick from the most basic shapes such as rectangular, circular and triangular  to some other unique shapes like flowers, trees or butterflies as seen in [13]. 
-The rectangular patch is considered by [8] as the most basic because it is easy to fabricate, simple to analyze and can be used for a wide range of applications. 
-The circular patch can be seen also by [8] as an alternative to the basic rectangular shape in certain applications, namely arrays, as it is slightly smaller than it. 
-The triangular shape is stated by [14] to being an alternative to both the rectangular and circular geometries when the priority miniaturization as it occupies less metalized area on the substrate than the previous. 
-However, at the present time these simpler designs don’t satisfy the need for multi-band operation to accommodate multiple services [7], to get this we need modified antenna shapes. 
-Some methods with modified shapes that let multiple frequencies resonate are slotted patches, that allow for dual-band when a U-slot is cut in one of the patches and for triple-band when another U-slot is cut into either patch, as described in [15]. 
-Stacked microstrip patch antennas which, as mentioned in [13], consist of different layers of dielectric material and patches that allow for a broader bandwidth  and gain, however as mentioned before the increase in height causes degradation of the radiation pattern. 
-Defected ground structure (DGS), as it is explained in [13], is used on the ground plane changing its paths length, as well as its impedance and capacity values resulting in a larger bandwidth. 
-Fractal geometry, described in [7], as a recursively generated geometry that uses an iterative process which leads to structures that are self-similar and self-affine that provide multiple current paths of different lengths leading to multiple resonant frequencies. 
+Common popular full-wave techniques, according to~\cite{garg2001microstrip} are spectral-domain full-wave solution, mixed-potential electric field integral equation approach and \gls{FDTD}.
 
 \subsection{Bandwidth Enhancement Techniques}
-The microstrip patch antenna, though widely used, still has the major disadvantages of a narrow bandwidth and low gain. 
-A lot of research has been done to improve these problems while keeping their compact structure, such as in [20]. 
+The \gls{MPA}, though widely used, still has the major disadvantages of a narrow bandwidth and low gain. 
+A lot of research has been done to improve these problems while keeping their compact structure, such as in~\cite{khan2016survey}. 
 In this section we will talk about some of these techniques.
 
 \subsubsection{Slot loading}
-In the slot technique slots of various shapes such as U or L [16] or of irregular shapes [18], are implanted on the antenna's patch and strategically alter the current path length and impedance improving its matching and allowing for a wider bandwidth without increasing the antenna's size. 
-Adding more slots adds new resonate frequencies and therefore the bandwidth is enhanced [18]. 
-The slot method however can introduce structural instability, surface wave loss [16] and decreased the radiation efficiency [17]. 
-This method can show a decrease [17] in gain but depending on the implementation can also there can also be an increase [19] in it.
+In the slot technique slots of various shapes such as U or L~\cite{analysis_gain_bandwidth_2025} or of irregular shapes~\cite{gain_bandwidth_enhancement_2016}, are implanted on the antenna's patch and strategically alter the current path length and impedance improving its matching and allowing for a wider bandwidth without increasing the antenna's size. 
+Adding more slots adds new resonate frequencies and therefore the bandwidth is enhanced~\cite{gain_bandwidth_enhancement_2016}. 
+The slot method however can introduce structural instability, surface wave loss~\cite{analysis_gain_bandwidth_2025} and decreased the radiation efficiency~\cite{analytical_review_bandwidth_2019}. 
+This method can show a decrease~\cite{analytical_review_bandwidth_2019} in gain but depending on the implementation can also there can also be an increase~\cite{techical_review_gain_bandwidth_2019} in it.
 
 \subsubsection{Defected Ground Structure}
 In the defective ground structure technique, a defect is engraved on the ground plane of the beneath the patch, this engraving disrupts the surface wave propagation across the substrate layer. 
-The defects can be simple or more complex depending on the desired performance [18] [19]. 
-This method improves the bandwidth and enhances the radiation efficiency [16] and it can be used in transmission lines, power amplifiers, oscillators and more mentioned in [18] and [19]. 
-The trade-off of this technique is stated in [16] and is the weakening of the ground plane’s robustness and it adds complexity to the fabrication process. 
+The defects can be simple or more complex depending on the desired performance~\cite{gain_bandwidth_enhancement_2016}~\cite{techical_review_gain_bandwidth_2019}. 
+This method improves the bandwidth and enhances the radiation efficiency~\cite{analysis_gain_bandwidth_2025} and it can be used in transmission lines, power amplifiers, oscillators and more mentioned in~\cite{gain_bandwidth_enhancement_2016} and~\cite{techical_review_gain_bandwidth_2019}. 
+The trade-off of this technique is stated in~\cite{analysis_gain_bandwidth_2025} and is the weakening of the ground plane’s robustness and it adds complexity to the fabrication process. 
 
 \subsubsection{Advanced Material Integrations}
-Another bandwidth enhancement method is advanced material integrations [16] that with its integration improve gain and enhance bandwidth. 
-[16] provides us with two examples, the first one being the frequency selective surface (FSS) layers that introduce bandwidth filtering and the other which is also mentioned in [19] is metamaterials that improve antenna radiation performance as it minimizes the side lobe ratio and improves directivity. 
-However, according to [16] this method increases the antenna’s thickness and fabrication complexity as well as the cost.
+Another bandwidth enhancement method is advanced material integrations~\cite{analysis_gain_bandwidth_2025} that with its integration improve gain and enhance bandwidth. 
+~\cite{analysis_gain_bandwidth_2025} provides us with two examples, the first one being the \gls{FSS} layers that introduce bandwidth filtering and the other which is also mentioned in~\cite{techical_review_gain_bandwidth_2019} is metamaterials that improve antenna radiation performance as it minimizes the side lobe ratio and improves directivity. 
+However, according to~\cite{analysis_gain_bandwidth_2025} this method increases the antenna’s thickness and fabrication complexity as well as the cost.
 
 \subsubsection{Feeding Techniques}
 The next method for improving the bandwidth is the feeding technique. 
-This technique has multiple implementations, and they are Coplanar Waveguide-fed, multiple feeding technique and dual feed technique. 
-The CPW-fed uses a center conductor between two ground planes to feed the antenna. 
-Its advantages and disadvantages are mentioned in [16]: it makes fabrication simple and keeps the antenna compact but without a design optimization it can have radiation losses and lack of impedance match. 
+This technique has multiple implementations, and they are \gls{CPW}-fed, multiple feeding technique and dual feed technique. 
+The \gls{CPW}-fed uses a center conductor between two ground planes to feed the antenna. 
+Its advantages and disadvantages are mentioned in~\cite{analysis_gain_bandwidth_2025}: it makes fabrication simple and keeps the antenna compact but without a design optimization it can have radiation losses and lack of impedance match. 
 The multiple feeding technique is as stated in the name the use of multiple feed lines to feed the antenna in multiple points. 
-According to [17] this causes an increase in the radiation efficiency and impedance match. 
+According to~\cite{analytical_review_bandwidth_2019} this causes an increase in the radiation efficiency and impedance match. 
 It enhances the bandwidth because it creates multiple resonance frequencies close to one another. 
-The dual feed structure is mentioned in both [18] and [19] and it works by having two feed points in one or two patches and it is used to control the vertical mode and prevent other modes from being excited. 
+The dual feed structure is mentioned in both~\cite{gain_bandwidth_enhancement_2016} and~\cite{techical_review_gain_bandwidth_2019} and it works by having two feed points in one or two patches and it is used to control the vertical mode and prevent other modes from being excited. 
 It prevents polarization degradation, helps with impedance matching and improves gain.
 Some feeding methods not included in this category that also increase bandwidth will be explained further in the feeding methods part of this thesis.
 
 \subsubsection{Parasitic Patch}
-The parasitic patch method is a technique that works by adding extra radiating patches that are not being fed near the main radiating patch, allowing them to couple with the main patch causing multiple frequencies to resonate close to each other enhancing the bandwidth [17]. 
-It is used to improve gain according to [18] and [19] and it has better impedance matching and radiation efficiency according to [17]. 
-This technique can have two configurations that are mentioned in both [18] and [19]: the coplanar technique and the stacked technique. 
+The parasitic patch method is a technique that works by adding extra radiating patches that are not being fed near the main radiating patch, allowing them to couple with the main patch causing multiple frequencies to resonate close to each other enhancing the bandwidth~\cite{analytical_review_bandwidth_2019}. 
+It is used to improve gain according to~\cite{gain_bandwidth_enhancement_2016} and~\cite{techical_review_gain_bandwidth_2019} and it has better impedance matching and radiation efficiency according to~\cite{analytical_review_bandwidth_2019}. 
+This technique can have two configurations that are mentioned in both~\cite{gain_bandwidth_enhancement_2016} and~\cite{techical_review_gain_bandwidth_2019}: the coplanar technique and the stacked technique. 
 In the coplanar technique multiple patches are coupled on a single plane above the dielectric substrate and one of them is given radiation, becoming the main patch. 
 In the stacked technique the patches are stacked vertically with a dielectric layer in between which allows the patches to share common aperture area. 
 In this last configuration the parasitic patches with lower dielectric constant are added on top of the radiating patch which gives us the advantages mentioned before while maintaining its physical size.
 
 \subsubsection{Air Gap}
 The air gap method is a method that utilizes air as the substrate in between the ground and the radiating patch. 
-According to [17] it is used to overcome the limitations of high dielectric materials such as lower radiation efficiency and gain and narrower bandwidth. 
-The use of air as a dielectric substrate, stated by [18] and [19] allows for an effective radiation pattern and low return loss. 
-This happens because air has lower permittivity. According to [18] this technique creates more directive antennas. 
-It is also explained in [18] that using this technique in a single patch and an aperture-coupled antenna allows for two frequencies to resonate in the structure. 
-Both [18] and [19] state that increasing the height of the air gap causes the distance between the two frequencies to decrease which is useful for bandwidth enhancement and gain improvement. 
+According to~\cite{analytical_review_bandwidth_2019} it is used to overcome the limitations of high dielectric materials such as lower radiation efficiency and gain and narrower bandwidth. 
+The use of air as a dielectric substrate, stated by~\cite{gain_bandwidth_enhancement_2016} and~\cite{techical_review_gain_bandwidth_2019} allows for an effective radiation pattern and low return loss. 
+This happens because air has lower permittivity. According to~\cite{gain_bandwidth_enhancement_2016} this technique creates more directive antennas. 
+It is also explained in~\cite{gain_bandwidth_enhancement_2016} that using this technique in a single patch and an aperture-coupled antenna allows for two frequencies to resonate in the structure. 
+Both~\cite{gain_bandwidth_enhancement_2016} and~\cite{techical_review_gain_bandwidth_2019} state that increasing the height of the air gap causes the distance between the two frequencies to decrease which is useful for bandwidth enhancement and gain improvement. 
 
 \subsubsection{Shorting Pin}
-The sorting pin technique according to [18] and [19] works by adding a pin to the patch antenna which leads to a decrease in the resonating frequency while maintaining the antenna’s size. 
+The sorting pin technique according to~\cite{gain_bandwidth_enhancement_2016} and~\cite{techical_review_gain_bandwidth_2019} works by adding a pin to the patch antenna which leads to a decrease in the resonating frequency while maintaining the antenna’s size. 
 Both references state that to increase high impedance matching the pin must be placed close to the antenna’s feed point. 
-[18] states that the shorting pin model allows for lower resonance frequency which in turn allow for a bigger degree of miniaturization for a fixed frequency. 
+~\cite{gain_bandwidth_enhancement_2016} states that the shorting pin model allows for lower resonance frequency which in turn allow for a bigger degree of miniaturization for a fixed frequency. 
 In addition to improving both bandwidth and gain this method helps decrease cross-polarization levels.
 
 \subsubsection{Dielectric Substrate}
-According to [18] and [19] the primary function of the substrate is to provide strength to the antenna’s structure the choice of material is essential as it directly impacts some critical parameters such as bandwidth, efficiency and radiation pattern. 
-[19] states that low dielectric constants usually provide excellent performance in terms of higher bandwidth in comparison to high substrate constants. 
-[18] and [19] say that the propagation of surface waves state can be reduced by choosing the correct dielectric substrate. 
-Furthermore, [19] states that the bandwidth can be improved by using multilayer dielectrics.  
+According to~\cite{gain_bandwidth_enhancement_2016} and~\cite{techical_review_gain_bandwidth_2019} the primary function of the substrate is to provide strength to the antenna’s structure the choice of material is essential as it directly impacts some critical parameters such as bandwidth, efficiency and radiation pattern. 
+~\cite{techical_review_gain_bandwidth_2019} states that low dielectric constants usually provide excellent performance in terms of higher bandwidth in comparison to high substrate constants. 
+~\cite{gain_bandwidth_enhancement_2016} and~\cite{techical_review_gain_bandwidth_2019} say that the propagation of surface waves state can be reduced by choosing the correct dielectric substrate. 
+Furthermore,~\cite{techical_review_gain_bandwidth_2019} states that the bandwidth can be improved by using multilayer dielectrics.  
 
 \subsection{Dual and Triple Band Methods}
-The need for multiband microstrip patch antennas was already mentioned in the geometry section, continuing that idea is [21] that also mentions it’s need in compact communication devices and systems to allow for multiple wireless communication standards in a single antenna system. 
+The need for multiband \gls{MPA}s was already mentioned in the geometry section, continuing that idea is~\cite{suthar2024multiband} that also mentions it’s need in compact communication devices and systems to allow for multiple wireless communication standards in a single antenna system. 
 Different methods to achieve dual and tri-band antennas are through the geometry of the antenna, through feeding techniques, by adding multiple resonant elements, through loading and traps, through metamaterials or through hybrid techniques.
 
 \subsubsection{Geometry}
-The geometry techniques are slots, previously mentioned, such as U, E and H, which work by having secondary resonant paths allowing for dual-band if there is only one slot, and tri-band if another one is added this fact is stated in [15]. 
-In [22] in addition to an U-shaped slot we can see I-shaped and T-shaped slots. 
+The geometry techniques are slots, previously mentioned, such as U, E and H, which work by having secondary resonant paths allowing for dual-band if there is only one slot, and tri-band if another one is added this fact is stated in~\cite{microstrip_review_2019}. 
+In~\cite{slotted_mpa_2014} in addition to an U-shaped slot we can see I-shaped and T-shaped slots. 
 The next geometry method was also mentioned before, and it is fractal geometry whose patterns allow for multiple paths of different sizes. 
-In [23] they mention the most common fractal geometries which are: Hilbert curve, Sierpinski gasket, and Koch snowflake and in addition to those the paper focuses on an H-fractal antenna. 
-In [24] Sierpinski gasket is the topic of study, and it also states that fractal antennas are inherently multiband. The last geometry method is the meandered fork-shapes which works as a combination of the action of meandering, meaning the arms of the fork are folded to achieve miniaturization, and a fork shaped antenna. 
-The benefit of meandering stated in [25] is that it increases the electrical length of the antenna without increasing its size. Each arm of the fork-shaped antenna corresponds to a different resonance, and each stub corresponds to a specific frequency band, this is explained by [26]. 
+In~\cite{Hfractal_Antenna_2014} they mention the most common fractal geometries which are: Hilbert curve, Sierpinski gasket, and Koch snowflake and in addition to those the paper focuses on an H-fractal antenna. 
+In~\cite{fractal_sierpinski_2000} Sierpinski gasket is the topic of study, and it also states that fractal antennas are inherently multiband. The last geometry method is the meandered fork-shapes which works as a combination of the action of meandering, meaning the arms of the fork are folded to achieve miniaturization, and a fork shaped antenna. 
+The benefit of meandering stated in~\cite{design_compact_dual_tri_band_2018} is that it increases the electrical length of the antenna without increasing its size. Each arm of the fork-shaped antenna corresponds to a different resonance, and each stub corresponds to a specific frequency band, this is explained by~\cite{xu2013compact_fork}. 
 The benefit of this fork shape is that each stub can be individually adjusted allowing to shift a frequency without compromising the rest.
 
 \subsubsection{Feed}
 The feeding techniques are three, two of them will be further explained in the feed methods chapter of this thesis and the third was already talked about in the bandwidth enhancement methods. 
-Those are aperture coupling, proximity coupling and dual feed techniques. For the aperture coupling [27] explains that it is a non-contacting feeding method where the feed line and the patch aren’t directly connected. 
+Those are aperture coupling, proximity coupling and dual feed techniques. For the aperture coupling~\cite{dual_resonant_aperture_2011} explains that it is a non-contacting feeding method where the feed line and the patch aren’t directly connected. 
 In the same paper it is stated that with this feeding method an antenna can operate at dual frequency just by modifying. Finally on that same paper, it is said that dual frequency aperture coupled antennas can substitute large bandwidth planar antennas, as having two distinct bands allows for separating of transmit-receive functions. 
 For the proximity coupling, also a non-contacting feeding method, where two substrates are used where one as the feeding line and the other the radiating patch. 
-In [28] proximity coupling is used in an antenna with two spiral strips of different lengths which generate different frequencies based on its dimensions allowing for a tri-band antenna with omnidirectional radiation patterns. 
+In~\cite{tri_band_compact_antenna_2018} proximity coupling is used in an antenna with two spiral strips of different lengths which generate different frequencies based on its dimensions allowing for a tri-band antenna with omnidirectional radiation patterns. 
 For the last method, the dual feed, as it was explained in a previous chapter, works by having two feed lines connected to the same patch in different points. 
-In [29] this method is obtained by using a planar feed and a coupled feed to excite different frequencies, these frequencies don’t interfere with each other as they are electrically different and physically separated.
+In~\cite{dual_band_dual_feed_antenna_2014} this method is obtained by using a planar feed and a coupled feed to excite different frequencies, these frequencies don’t interfere with each other as they are electrically different and physically separated.
 
 \subsubsection{Multiple Resonant Elements}
 For multiple resonant elements we will only talk about stacked patches and coplanar parasitic elements. 
 Stacked patches work by stacking extra radiating patches that are not fed but get energy by coupling with the main patch. 
-They were already talked about in the bandwidth enhancement methods chapter as they work for both broad banding and multi banding, more specifically for dual band as stated in [30] by having the two stacked patches have different relative dimensions. 
+They were already talked about in the bandwidth enhancement methods chapter as they work for both broad banding and multi banding, more specifically for dual band as stated in~\cite{dual_frequency_stacked_patch_2008} by having the two stacked patches have different relative dimensions. 
 Coplanar parasitic elements work by placing other elements on the same layer as the patch which is the only one being fed. 
 This works as the parasitic elements stated before in the bandwidth enhancement chapter. 
-An example of this is in [31] where two U-shaped parasitic elements are placed around the patch. 
+An example of this is in~\cite{compact_multiband_patch_antenna_2015} where two U-shaped parasitic elements are placed around the patch. 
 In this paper the two elements are responsible for the second and third frequency bands, as they have different sizes, they vibrate at different frequencies.
 
 \subsubsection{Loading/Traps}
-Loading techniques work by adding structures that “load” the antenna. This can be done through reactive loading, shorting pins or DGS, the last one was also mentioned in the bandwidth enhancement methods. 
-With reactive loading we can achieve a dual-band antenna like in [32] and it works by loading the patch with a rectangular slot in a specific position and size this creates a new path of different electrical length allowing for a second frequency to resonate. 
-With shorting pins, we can achieve a dual-band antenna like in [33] by placing physical metallic pins connecting the radiating patch and the ground plane. 
+Loading techniques work by adding structures that “load” the antenna. This can be done through reactive loading, shorting pins or \gls{DGS}, the last one was also mentioned in the bandwidth enhancement methods. 
+With reactive loading we can achieve a dual-band antenna like in~\cite{dual_band_reactive_loading_2016} and it works by loading the patch with a rectangular slot in a specific position and size this creates a new path of different electrical length allowing for a second frequency to resonate. 
+With shorting pins, we can achieve a dual-band antenna like in~\cite{dual_band_shorting_pins_2000} by placing physical metallic pins connecting the radiating patch and the ground plane. 
 These pins are inserted in a specific location to tune the input impedance of the \(TM_{01}\) mode, and the feed is placed to provide the desired input impedance of the \(TM_{03}\) mode making the antenna support two different resonant modes.
 
 \subsubsection{Metamaterials}
 For metamaterials, which are layers placed above the antenna radiator used to redirect, focus or create new electromagnetic resonances, we have complementary split ring resonators and superstrates. 
-Complimentary split ring resonators, or just CSRR, exhibit negative permittivity and permeability. 
-In [34] the CSRR are embedded on the ground plane and act like an artificial resonator, which allows for multiband design as the new resonances are created by the excitation of the CSRR.
-In the same paper we can see the multiband designs, as it is shown that adding one CSRR introduces a new lower frequency to the patch making it dual band, and adding two CSRR of different sizes introduces two new unique frequencies making it tri-band. 
-Superstrates such as the superstrate metal ring used in [35], work by “splitting” a single band into two bands. 
+\gls{CSRR}, exhibit negative permittivity and permeability. 
+In~\cite{dual_triple_band_patch_CSRR_2015} the \gls{CSRR} are embedded on the ground plane and act like an artificial resonator, which allows for multiband design as the new resonances are created by the excitation of the \gls{CSRR}.
+In the same paper we can see the multiband designs, as it is shown that adding one \gls{CSRR} introduces a new lower frequency to the patch making it dual band, and adding two \gls{CSRR} of different sizes introduces two new unique frequencies making it tri-band. 
+Superstrates such as the superstrate metal ring used in~\cite{dual_band_superstrate_2020}, work by “splitting” a single band into two bands. 
 A resonating lower band because of the radius of the metal ring and a higher band due to the induced electrical fields between the patch and the superstrate.
 
 \subsubsection{Hybrid}
 The final method to achieve dual and triband antennas is a hybrid method. 
-Hybrid methods are a combination of two or more of the methods stated, such as in paper [29] it is used dual feed to get two different resonant modes and to achieve high isolation in a small antenna a T-shaped slot is cut into the radiating patch and a L-shaped slot is cut into the ground patch. 
+Hybrid methods are a combination of two or more of the methods stated, such as in paper~\cite{dual_band_dual_feed_antenna_2014} it is used dual feed to get two different resonant modes and to achieve high isolation in a small antenna a T-shaped slot is cut into the radiating patch and a L-shaped slot is cut into the ground patch. 
 The combination of these two techniques allows for a good isolation from signal leaks onto each port resulting in high radiation efficiency of the dual band antenna. 
-[31] can also be considered a hybrid method as it combines both parasitic elements and U-slots. DGS which were mentioned in the bandwidth enhancement chapter could also work for multi bands as it can introduce new resonant frequencies however as in [36] it usually doesn’t work alone making it a hybrid method. 
-In [37] aperture coupling is used in combination with air gap stacked patches which work for dual-band and possibly tri-band with the aperture coupled patch creating the lower band and the stacked patch creating the second, the air gap can tune the resonant frequencies.
+[31] can also be considered a hybrid method as it combines both parasitic elements and U-slots.~\gls{DGS} which were mentioned in the bandwidth enhancement chapter could also work for multi bands as it can introduce new resonant frequencies however as in~\cite{mpa_defected_ground_2019} it usually doesn’t work alone making it a hybrid method. 
+In~\cite{vishwakarma2011aperture} aperture coupling is used in combination with air gap stacked patches which work for dual-band and possibly tri-band with the aperture coupled patch creating the lower band and the stacked patch creating the second, the air gap can tune the resonant frequencies.
 
 \subsubsection{Use Cases}
-TO DO
+Referring back to the beginning of this section, where the need for multiband antennas is mentioned, we will now see two examples of this. 
+The first one being~\cite{tri_band_trap_loaded_antenna_2025} which proposes a tri-band antenna for Wi-Fi 7, suitable for \gls{MIMO} applications and  mobile access points. 
+The paper proposes an antenna with high antenna efficiency and stable radiation patterns. The second one being~\cite{su2024multiband} which presents a multiband antenna design for smartwatche devices. 
+This last antenna was projected with a large amount of resonant frequencies and it even includes extended band for future generation compatibility.
 
 \subsection{Feed Methods}
-For the feeding of the microstrip antenna there are many configurations that can be used, the four most popular ones according to [7] are the microstrip line, the coaxial probe, the aperture coupling and the proximity coupling. 
+For the feeding of the microstrip antenna there are many configurations that can be used, the four most popular ones according to~\cite{balanis2016antenna} are the microstrip line, the coaxial probe, the aperture coupling and the proximity coupling. 
 To choose the appropriate feeding technique we have to take into consideration some factors. 
-[8] considers the efficiency of power transfer between the feed line and the antenna one of those factors, because if there is no impedance matching there will be surface wave loss and some unintended radiation leaking from the feed leading to bigger side lobes. 
-A good choice of feeding method is one that minimizes this unintended radiation according to [8].
+~\cite{garg2001microstrip} considers the efficiency of power transfer between the feed line and the antenna one of those factors, because if there is no impedance matching there will be surface wave loss and some unintended radiation leaking from the feed leading to bigger side lobes. 
+A good choice of feeding method is one that minimizes this unintended radiation according to~\cite{garg2001microstrip}.
 
 \subsubsection{Microstrip Line Feed}
 The microstrip feed line, also known as inset feed, is a narrow strip of metal, much thinner than the patch itself that connects directly to its edge. 
-The inset feed advantages, mentioned in [7] are the ease of fabrication, simple to match (just adjust the inset position) and simple to model. 
-The disadvantages are also mentioned in [7] where it is explained that with the thickness increase of the substrate there will be an increase in unintended radiation and surface waves, these factors will limit the usable bandwidth to a very narrow range.
+The inset feed advantages, mentioned in~\cite{balanis2016antenna} are the ease of fabrication, simple to match (just adjust the inset position) and simple to model. 
+The disadvantages are also mentioned in~\cite{balanis2016antenna} where it is explained that with the thickness increase of the substrate there will be an increase in unintended radiation and surface waves, these factors will limit the usable bandwidth to a very narrow range.
 
 \subsubsection{Coaxial Probe Feed}
 The coaxial probe feed is also easy to fabricate and match. 
-A description of the feed is presented in [8] where it is said that the center coaxial conductor passes through the substrate and is soldered to the antenna patch where the best impedance match is achieved and because of this it has low unintended radiation. 
-Its disadvantages are mentioned in [7] them being also having a narrow bandwidth and being difficult to model. 
-[7] mentions another problem shared by both the microstrip feed line and the coaxial probe feed: they possess inherent asymmetries because they connect to the patch at a single point or edge. 
+A description of the feed is presented in~\cite{garg2001microstrip} where it is said that the center coaxial conductor passes through the substrate and is soldered to the antenna patch where the best impedance match is achieved and because of this it has low unintended radiation. 
+Its disadvantages are mentioned in~\cite{balanis2016antenna} them being also having a narrow bandwidth and being difficult to model. 
+~\cite{balanis2016antenna} mentions another problem shared by both the microstrip feed line and the coaxial probe feed: they possess inherent asymmetries because they connect to the patch at a single point or edge. 
 This problem generates higher order modes which in turn produce cross-polarized radiation.
 
 \subsubsection{Aperture Coupled Feed}
 To solve the problems of narrow bandwidth, unintended radiation and cross polarization presented by both the microstrip feed line and the coaxial probe feed the aperture coupling microstrip feed was introduced. 
-The aperture coupling feed is a non-contacting technique that according to [7] consists of two substrates separated by a ground plane. 
+The aperture coupling feed is a non-contacting technique that according to~\cite{balanis2016antenna} consists of two substrates separated by a ground plane. 
 A microstrip feed line is located on the bottom side of the lower substrate and the radiation patch is on the top side of the upper substrate. 
-The feed line coupled its energy to the patch through the slot between the substrates. The advantages of this feed can be taken from [7] and [8] and they are improved bandwidth, independent optimization of the feed mechanism and of the radiation element, it prevents united radiation and improves polarization purity because the ground plane creates a shielding effect. 
-The disadvantages of this feed line can be found in [7] and they are the increased difficulty of fabrication and the added complexity to match.
+The feed line coupled its energy to the patch through the slot between the substrates. The advantages of this feed can be taken from~\cite{balanis2016antenna} and~\cite{garg2001microstrip} and they are improved bandwidth, independent optimization of the feed mechanism and of the radiation element, it prevents united radiation and improves polarization purity because the ground plane creates a shielding effect. 
+The disadvantages of this feed line can be found in~\cite{balanis2016antenna} and they are the increased difficulty of fabrication and the added complexity to match.
 
 \subsubsection{Proximity Coupled Feed}
-The last feeding method mentioned was the proximity coupled microstrip feed, which is [8] also mentions as electromagnetically coupled microstrip feed. 
+The last feeding method mentioned was the proximity coupled microstrip feed, which is~\cite{garg2001microstrip} also mentions as electromagnetically coupled microstrip feed. 
 This is also a non-contacting feed technique that uses two substrate layers where the lower layer has the feeding line, and the top layer has the radiating patch. 
 In this case the energy is capacitively transferred through the substrate layers. 
-The advantages of this method stated in [7] and [8] and they are larger bandwidth than the rest, reduced unintended radiation, as there is no soldering cross polarization and pattern degradation problems are reduced and it has flexibility in the design. 
+The advantages of this method stated in~\cite{balanis2016antenna} and~\cite{garg2001microstrip} and they are larger bandwidth than the rest, reduced unintended radiation, as there is no soldering cross polarization and pattern degradation problems are reduced and it has flexibility in the design. 
 The disadvantages are also stated in both books, and they are the difficulty in fabrication and the lack of the shielding effect created by the slot in the aperture coupling feed method.
 
 \subsection{AI Optimization}
 Usually, to find the right antenna dimensions for dual and tri-band antennas engineers can use mathematical formulas or even trial and error, the problem with these methods is the many variables an antenna has, making it hard and time consuming to find the perfect antenna combination. 
-A solution to this problem is the use of AI and machine learning to help us find the best design for our needs. 
+A solution to this problem is the use of \gls{AI} and Machine Learning to help us find the best design for our needs. 
 
 \subsubsection{Genetic Algorithm}
-An AI method used for optimization is binary-coded genetic algorithm, an example of this is [38] where it is used to improve a tri-band antenna. 
-The genetic algorithm (GA) works by making iterations including selection, reproduction and variation: it starts with random antenna designs and after testing each design, it selects the ones with the best tri-band response and combines them to get a new generation of antennas, it also adds random changes so maintain diversity. 
-The binary-coded genetic algorithm in [38] works by adding or removing radiating cells from the patch allowing for non-intuitive shapes. 
+An \gls{AI} method used for optimization is \gls{BCGA}, an example of this is~\cite{tri_band_mpa_genetic_2024} where it is used to improve a tri-band antenna. 
+The \gls{GA} works by making iterations including selection, reproduction and variation: it starts with random antenna designs and after testing each design, it selects the ones with the best tri-band response and combines them to get a new generation of antennas, it also adds random changes so maintain diversity. 
+The \gls{BCGA} in~\cite{tri_band_mpa_genetic_2024} works by adding or removing radiating cells from the patch allowing for non-intuitive shapes. 
 This method reduces complexity and residual radiation and improves the impedance bandwidth, directivity and gain. 
 However, this method needs significant computation resources and several interactions making the design cycles longer.
-
+\vspace{10em}
 \subsubsection{Support Vector Regression}
-The method to solve this is stated in [39] and uses machine learning is the support vector regression (SVR), a supervised machine learning technique, predicts performance and optimizes the design parameters of the antenna more efficiently and it is best suited for complex and nonlinear relations between the antenna’s physical dimensions and its performance parameters. 
-SVR works by first running many simulations to create a dataset, after this training is done the model can instantly calculate the best dimensions to achieve any specific dual or tri-band antenna. 
-The advantages of this method, according to [39] are the speeding of the optimization process and the minimizes the necessity for lengthy simulations.
+The method to solve this is stated in~\cite{mpa_performance_optimization_2025} and uses machine learning is the \gls{SVR}, a supervised machine learning technique, predicts performance and optimizes the design parameters of the antenna more efficiently and it is best suited for complex and nonlinear relations between the antenna’s physical dimensions and its performance parameters. 
+\gls{SVR} works by first running many simulations to create a dataset, after this training is done the model can instantly calculate the best dimensions to achieve any specific dual or tri-band antenna. 
+The advantages of this method, according to~\cite{mpa_performance_optimization_2025} are the speeding of the optimization process and the minimizes the necessity for lengthy simulations.
 
 
 
