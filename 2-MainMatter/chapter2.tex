@@ -250,7 +250,7 @@ Sizing methods according to~\cite{balanis2016antenna},~\cite{garg2001microstrip}
 The most popular sizing methods are the transmission line model, the cavity model and the full wave model.
 
 \subsubsection{Transmission Line Model}
-The transmission line model, as stated by~\cite{balanis2016antenna}, is the easiest one and it gives good physical insight, but it is le.
+The transmission line model, as stated by~\cite{balanis2016antenna}, is the easiest one and it gives good physical insight, but it is less accurate and lacks versatility.
 It determines the characteristic impedance and the propagation constrain by the patch size and substrate parameters. 
 In~\cite{garg2001microstrip} the rectangular patch is defined by four edges where the variation of the field defines if the edge is a radiating type or not. It also uses the mode $TM_{10}$ as an example, explaining that the edges at $x=0$ m and $L$ are radiating types because along them the electric field is uniform and the walls at $y=0$ m and $W$ are non-radiating types because along them there is half-wave variation. 
 For this reason,~\cite{garg2001microstrip} states that the patch antenna’s radiation patterns are treated as an array of two narrow slots separated by the path length.
@@ -268,7 +268,7 @@ Despite this, it is still easy to determine the interior electric field distribu
 \subsubsection{Full Wave Model}
 The full wave model is stated by~\cite{garg2001microstrip} to be able to overcome the limitations of the other two models. 
 This model includes the effects of dielectric loss, conductor loss, space wave radiation, surface waves and external coupling and removes the simplifying assumptions made by the other models. 
-It maintains accuracy by enforcing the boundary conditions at the air-dielectric interface using Green’s functions or differential forms of Maxwell’s equations. 
+It maintains accuracy by enforcing the boundary conditions at the air-dielectric interface using Green’s functions or differential forms of Maxwell’s equations, both referenced in~\cite{garg2001microstrip}. 
 This method is very versatile as it provides the most accurate solution for the impedance and radiation characteristics, it can size arbitrary shapes, arrays and stacked elements. 
 However, as it is numerically intensive and complex it requires a big computational cost and provides less immediate results. 
 Common popular full-wave techniques, according to~\cite{garg2001microstrip} are spectral-domain full-wave solution, mixed-potential electric field integral equation approach and \gls{FDTD}.
