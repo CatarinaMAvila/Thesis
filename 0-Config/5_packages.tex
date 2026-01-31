@@ -12,11 +12,11 @@
 %%============================================================
 %%  FOR DEMO PURPOSES ONLY --- YOU SHOULD REMOVE THESE PACKAGES
 %%============================================================
-\usepackage{float}        % FOR DEMO PURPOSES ONLY --- PLEASE REMOVE
-\usepackage{wrapfig}      % FOR DEMO PURPOSES ONLY --- PLEASE REMOVE
-\restylefloat{figure}     % FOR DEMO PURPOSES ONLY --- PLEASE REMOVE
-\usepackage{metalogo}     % FOR DEMO PURPOSES ONLY --- PLEASE REMOVE
-\usepackage{lipsum}       % FOR DEMO PURPOSES ONLY --- PLEASE REMOVE
+%\usepackage{float}        % FOR DEMO PURPOSES ONLY --- PLEASE REMOVE
+%\usepackage{wrapfig}      % FOR DEMO PURPOSES ONLY --- PLEASE REMOVE
+%\restylefloat{figure}     % FOR DEMO PURPOSES ONLY --- PLEASE REMOVE
+%\usepackage{metalogo}     % FOR DEMO PURPOSES ONLY --- PLEASE REMOVE
+%\usepackage{lipsum}       % FOR DEMO PURPOSES ONLY --- PLEASE REMOVE
 \IfFileExists{byo-twemojiss.sty}{
   \usepackage{byo-twemojis}     % to typeset emojis
   \newcommand{\emojiSmile}{\raisebox{-3pt}{\scalebox{1.3}{\byoTwemoji{head; eyes normal opened; mouth laughing}}}}
@@ -50,6 +50,15 @@
 
 \usepackage{amsmath}
 
+\usepackage{etoolbox}
+
+% Force List of Figures into TOC with working hyperlink
+\makeatletter
+\pretocmd{\listoffigures}{%
+  \phantomsection
+  \addcontentsline{toc}{chapter}{\listfigurename}%
+}{}{}
+\makeatother
 
 % \usepackage{indentfirst}       % Indent first list after a (sub)section title
 

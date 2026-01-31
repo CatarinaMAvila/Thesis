@@ -9,7 +9,7 @@
 \typeout{NT FILE chapter1.tex}%
 
 \chapter{Introduction}
-%\label{cha:introduction}
+\label{cha:introduction}
 
 Wireless communication systems are technologies that transfer information through the air without any physical wires~\cite{wireless_review_2020}. 
 This way of communicating can be achieved through the use of a \gls{WLAN}~\cite{overview_WLAN}. 
@@ -18,8 +18,8 @@ A \gls{WLAN} is built on a cellular architecture that divides a system into cell
 The benefits of using a \gls{WLAN} are the mobility, flexibility, ease of management, easy of maintenance and lowered cost~\cite{overview_WLAN}. 
 There are multiple standards to a \gls{WLAN}, also called Wi-Fi standards, some of them being 802.11n (Wi-Fi 4), 802.11ac (Wi-Fi 5), 802.11ax (Wi-Fi 6 and Wi-Fi 6E) and 802.11be (Wi-Fi 7), with these last two being the latest. 
 802.11ax offered greater throughput, better energy efficiency and enhanced performance in crowded environments~\cite{evolution_WIFI_standards}, but with the increased demand for faster speeds and enhanced reliability in wireless communications~\cite{evolution_WIFI_standards}, the Wi-Fi 7 is the most recent solution developed. 
-The main improvements in Wi-Fi 7 that make it stand out from its predecessor are a channel bandwidth of up to 320 MHz that allows a more efficient and high-speed data transfer. 
-The use of 4096-QAM modulation that lets the data that is transferred to be packed with more information in each radio wave and the introduction of the \gls{MLO}, that grants users the ability to connect to multiple frequency bands, like 2.4 GHz, 5 GHz, 6 GHz at the same time, giving the user a stable connection with reduced delay\cite{revista_foz_351}. 
+The main improvements in Wi-Fi 7 that make it stand out from its predecessor are a channel bandwidth, $B$, of up to $B = 320$ MHz that allows a more efficient and high-speed data transfer. 
+The use of 4096-\glsxtrshort{QAM} modulation that lets the data that is transferred to be packed with more information in each radio wave and the introduction of the \gls{MLO}, that grants users the ability to connect to multiple frequency bands, like 2.4 GHz, 5 GHz, 6 GHz at the same time, giving the user a stable connection with reduced delay~\cite{revista_foz_351}. 
 
 \section{Problem Statement and Motivation}
 One of the most common antenna technologies for Wi-Fi 7 and the one this thesis will be focusing on is the \gls{MPA}, also called patch antennas. 
@@ -33,19 +33,19 @@ Therefore, motivation for this thesis is to answer the following question:
 \textit{What are the best techniques to create/optimize an antenna of the type microstrip patch that efficiently operates in three different Wi-Fi 7 (802.11be) bands?}
 \end{quote}
 This problem is relevant because in the current world, there is a growing need for high-speed wireless communication devices that can also handle the volume of data of today's applications~\cite{revista_foz_351}, and
-\glspl{MPA} allow for these objectives to be acheived in compact devices due to their advantages\cite{microstrip_review_2019}.
+\glspl{MPA} allow for these objectives to be acheived in compact devices due to their advantages~\cite{microstrip_review_2019}.
 
-\section{Objectives}
-To properly find an answer to the proposed question, we must first define some objectives:
+\section{Objectives}\label{sec:objectives}
+To properly find an answer to the proposed question, some objectives must be defined.:
 \begin{itemize}
-    \item Design of a multiband \gls{MPA};
-    \item Simulation of the designed antenna using MATLAB;
+    \item Design of a multiband \Glsfmtshort{MPA};
+    \item Simulation of the designed antenna using MATLAB\textsuperscript{TM}/CST;
     \item Antenna optimization;
     \item Fabrication and measurement of the antenna's performance.
 \end{itemize}
 
 \section{Document Structure}
-This document is devided into four chapters. Starting with this one, and is where the context, problem statement and objectives are presented.
-The second chapter is a literature review on \glspl{MPA}, where its fundamentals are explained as well as the implementation techniques for multiband \glspl{MPA} are shown.
-The next chapter presents this thesis' work plan, a breakdown of the tasks and respective timeline as well as work done and what is expected to be delivered.
-Finally, the last chapter presents some conclusions of the work done and some future work to be made.
+This document is devided into four chapters. Starting with this, which is~\ref{cha:introduction}, is where the context, problem statement and objectives are presented.
+In~\ref{cha:stateoftheart} a literature review on \glspl{MPA} is presented, where its fundamentals are explained as well as the implementation techniques for multiband \glspl{MPA} are shown.
+Next in~\ref{cha:workplan} is presented this thesis' work plan, a breakdown of the tasks and respective timeline as well as work done and what is expected to be delivered.
+Finally,~\ref{cha:conclusions} presents some conclusions of the work done and some future work to be made.
